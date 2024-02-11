@@ -1,6 +1,7 @@
-from pyrogram import Client, filters
+from pyrogram import Client, filters, idle
 from pyrogram.types import *
 from pymongo import MongoClient
+from pyrogram import enums
 import requests
 import random
 import os
@@ -29,13 +30,13 @@ bot = Client(
 async def is_admins(chat_id: int):
     return [
         member.user.id
-        async for member in bot.iter_chat_members(
+        async for member in bot.get_chat_members(
             chat_id, filter="administrators"
         )
     ]
 
 
-@bot.on_message(filters.command("start") & filters.private & ~filters.edited)
+@bot.on_message(filters.command("start") & filters.private)
 async def start_(client: Client, message: Message):
     await message.reply_photo(
         photo=f"{BOT_IMAGE}",
@@ -73,7 +74,7 @@ async def start_(client: Client, message: Message):
     )
     
     
-@bot.on_message(filters.command(["/start", f"start@{BOT_USERNAME}", "/alive", ".alive", "#himanshu", "#yummi"]) & filters.group & ~filters.edited)
+@bot.on_message(filters.command(["/start", f"start@{BOT_USERNAME}", "/ritik", ".himanshu", "#ritikraj", "#ritik"]) & filters.group)
 async def start(client: Client, message: Message):
     await message.reply_photo(
         photo=f"{BOT_IMAGE}",
@@ -82,7 +83,7 @@ async def start(client: Client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        " 💥 𝐉𝐨𝐢𝐧 𝐎𝐮𝐫 𝐂𝐡𝐚𝐭 𝐆𝐫𝐨𝐮𝐩 💞", url=f"https://t.me/EsproSupport")
+                        " 💥 𝐉𝐨𝐢𝐧 𝐎𝐮𝐫 𝐂𝐡𝐚𝐭 𝐆𝐫𝐨𝐮𝐩 💞", url=f"https://t.me/{SUPPORT_GROUP}")
                 ]
             ]
         ),
@@ -161,7 +162,7 @@ async def vai(client: Client, message: Message):
        v = vdb["vDb"]["v"] 
        is_v = v.find_one({"chat_id": message.chat.id})
        if not is_v:
-           await bot.send_chat_action(message.chat.id, "typing")
+           await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.text})  
            k = chatai.find_one({"word": message.text})      
@@ -184,7 +185,7 @@ async def vai(client: Client, message: Message):
        bot_id = getme.id                             
        if message.reply_to_message.from_user.id == bot_id: 
            if not is_v:                   
-               await bot.send_chat_action(message.chat.id, "typing")
+               await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
                K = []  
                is_chat = chatai.find({"word": message.text})
                k = chatai.find_one({"word": message.text})      
@@ -227,7 +228,7 @@ async def vstickerai(client: Client, message: Message):
        v = vdb["vDb"]["v"] 
        is_v = v.find_one({"chat_id": message.chat.id})
        if not is_v:
-           await bot.send_chat_action(message.chat.id, "typing")
+           await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.sticker.file_unique_id})      
            k = chatai.find_one({"word": message.text})      
@@ -250,7 +251,7 @@ async def vstickerai(client: Client, message: Message):
        bot_id = getme.id
        if message.reply_to_message.from_user.id == bot_id: 
            if not is_v:                    
-               await bot.send_chat_action(message.chat.id, "typing")
+               await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
                K = []  
                is_chat = chatai.find({"word": message.text})
                k = chatai.find_one({"word": message.text})      
@@ -289,7 +290,7 @@ async def vprivate(client: Client, message: Message):
    chatdb = MongoClient(MONGO_URL)
    chatai = chatdb["Word"]["WordDb"]
    if not message.reply_to_message: 
-       await bot.send_chat_action(message.chat.id, "typing")
+       await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
        K = []  
        is_chat = chatai.find({"word": message.text})                 
        for x in is_chat:
@@ -305,7 +306,7 @@ async def vprivate(client: Client, message: Message):
        getme = await bot.get_me()
        bot_id = getme.id       
        if message.reply_to_message.from_user.id == bot_id:                    
-           await bot.send_chat_action(message.chat.id, "typing")
+           await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.text})                 
            for x in is_chat:
@@ -332,7 +333,7 @@ async def vprivatesticker(client: Client, message: Message):
    chatdb = MongoClient(MONGO_URL)
    chatai = chatdb["Word"]["WordDb"] 
    if not message.reply_to_message:
-       await bot.send_chat_action(message.chat.id, "typing")
+       await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
        K = []  
        is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
        for x in is_chat:
@@ -348,7 +349,7 @@ async def vprivatesticker(client: Client, message: Message):
        getme = await bot.get_me()
        bot_id = getme.id       
        if message.reply_to_message.from_user.id == bot_id:                    
-           await bot.send_chat_action(message.chat.id, "typing")
+           await bot.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
            for x in is_chat:
@@ -361,4 +362,6 @@ async def vprivatesticker(client: Client, message: Message):
            if not Yo == "text":
                await message.reply_sticker(f"{hey}")
        
-bot.run()
+bot.start()
+print("BGT CHAT BOT BOOTED SUCCESSFULLY")
+idle()
